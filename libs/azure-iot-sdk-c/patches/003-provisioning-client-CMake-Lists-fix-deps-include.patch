@@ -1,0 +1,11 @@
+--- a/provisioning_client/CMakeLists.txt
++++ b/provisioning_client/CMakeLists.txt
+@@ -8,8 +8,6 @@ compileAsC99()
+ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DUSE_PROV_MODULE")
+ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DUSE_PROV_MODULE")
+ 
+-add_subdirectory(./deps)
+-
+ set(provisioning_libs)
+ set(provisioning_headers)
+ 
