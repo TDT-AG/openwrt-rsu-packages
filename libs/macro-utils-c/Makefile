@@ -30,6 +30,7 @@ define Package/macro-utils-c
   SUBMENU:=Azure IoT
   TITLE:=Microsoft Azure IoT SDKs - macro utils for c
   URL:=https://github.com/Azure/macro-utils-c
+  BUILDONLY:=1
 endef
 
 define Package/macro-utils-c/description

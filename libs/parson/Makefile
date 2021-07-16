@@ -29,6 +29,7 @@ define Package/parson
   CATEGORY:=Libraries
   TITLE:=Lighweight json library written in c
   URL:=https://github.com/kgabis/parson
+  BUILDONLY:=1
 endef
 
 define Package/parson/description

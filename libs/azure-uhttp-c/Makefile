@@ -36,6 +36,7 @@ define Package/azure-uhttp-c
   SUBMENU:=Azure IoT
   TITLE:=Microsoft Azure IoT SDKs - HTTP library for c
   URL:=https://github.com/Azure/azure-uhttp-c
+  BUILDONLY:=1
 endef
 
 define Package/azure-uhttp-c/description

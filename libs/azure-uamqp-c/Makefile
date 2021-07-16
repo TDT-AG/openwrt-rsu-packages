@@ -36,6 +36,7 @@ define Package/azure-uamqp-c
   SUBMENU:=Azure IoT
   TITLE:=Microsoft Azure IoT SDKs - AMQP library for c
   URL:=https://github.com/Azure/azure-uamqp-c
+  BUILDONLY:=1
   DEPENDS:= \
     +libuuid \
     +libopenssl \

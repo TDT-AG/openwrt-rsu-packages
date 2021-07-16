@@ -36,6 +36,7 @@ define Package/azure-umqtt-c
   SUBMENU:=Azure IoT
   TITLE:=Microsoft Azure IoT SDKs - MQTT library for c
   URL:=https://github.com/Azure/azure-umqtt-c
+  BUILDONLY:=1
   DEPENDS:= \
     +libuuid \
     +libopenssl \

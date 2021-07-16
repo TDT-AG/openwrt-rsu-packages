@@ -31,6 +31,7 @@ define Package/umock-c
   TITLE:=Microsoft Azure IoT SDKs - mocking library for c
   URL:=https://github.com/Azure/umock-c
   DEPENDS:=+macro-utils-c
+  BUILDONLY:=1
 endef
 
 define Package/umock-c/description
