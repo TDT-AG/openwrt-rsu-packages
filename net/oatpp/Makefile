@@ -12,7 +12,7 @@ PKG_VERSION:=1.2.5
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=https://github.com/oatpp/oatpp/archive/refs/tags/$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=https://github.com/oatpp/oatpp/archive/$(PKG_VERSION)/
 PKG_HASH:=36276e8b23e68ece1e6093c3f06fc80e3d42a5f4e47cdeef5e7e63f36eeddaad
 
 PKG_MAINTAINER:=Florian Eckert <fe@dev.tdt.de>
