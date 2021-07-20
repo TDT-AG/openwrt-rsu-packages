@@ -21,7 +21,6 @@ PKG_MAINTAINER:=Florian Eckert <fe@dev.tdt.de>
 PKG_LICENSE:=MIT
 PKG_LICENSE_FILES:=LICENSE
 
-# This packages are linked statically
 PKG_BUILD_DEPENDS:= \
 	azure-c-shared-utility \
 	azure-uamqp-c \
@@ -31,12 +30,10 @@ PKG_BUILD_DEPENDS:= \
 	macro-utils-c \
 	umock-c
 
-CMAKE_INSTALL:=1
-
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/cmake.mk
 
-define Package/azure-iot-sdk-c/default
+define Package/iothub-client/default
   SECTION:=libs
   CATEGORY:=Libraries
   SUBMENU:=Azure IoT
@@ -48,22 +45,27 @@ define Package/azure-iot-sdk-c/default
     +libcurl
 endef
 
-define Package/iothub-client
-  $(call Package/azure-iot-sdk-c/default)
-  TITLE+= client library
+define Package/iothub-client-hsm-type-no
+  $(call Package/iothub-client/default)
+  TITLE+= client library without hsm
+  VARIANT:=iothub-client-hsm-type-no
+  CONFLICTS:=iothub-client-hsm-type-custom
+  PROVIDES:=iothub-client
 endef
 
-define Package/iothub-client/description
-	Library for iothub-client
+define Package/iothub-client-hsm-type-no/description
+	Library for iothub-client without hsm
 endef
 
-define Package/prov-device-client/description
-	Library for client provision
+define Package/iothub-client-hsm-type-custom
+  $(call Package/iothub-client/default)
+  TITLE+= client library with hsm type custom
+  VARIANT:=iothub-client-hsm-type-custom
+  PROVIDES:=iothub-client
 endef
 
-define Package/prov-device-client
-  $(call Package/azure-iot-sdk-c/default)
-  TITLE+= provision library
+define Package/iothub-client-hsm-type-custom/description
+	Library for iothub-client with custom hsm
 endef
 
 define Build/Prepare
@@ -75,29 +77,53 @@ define Build/Prepare
 	$(RM) -rf $(PKG_BUILD_DIR)/provisioning_client/deps
 endef
 
-CMAKE_BINARY_SUBDIR:=build_openwrt
-
 CMAKE_OPTIONS += \
-		-Duse_amqp=ON \
-		-Duse_http=ON \
-		-Duse_mqtt=ON \
-		-Dhsm_type_custom=ON \
-		-Duse_prov_client=ON \
-		-Duse_installed_dependencies=ON \
-		-Dskip_samples=ON \
-		-Dbuild_as_dynamic=ON
+	-Duse_amqp=ON \
+	-Duse_http=ON \
+	-Duse_mqtt=ON \
+	-Duse_installed_dependencies=ON \
+	-Dskip_samples=ON \
+	-Dbuild_as_dynamic=ON \
+	-Dbuild_service_client=OFF \
+	-Dbuild_provisioning_service_client=OFF
 
-define Package/iothub-client/install
-	$(INSTALL_DIR) $(1)/usr/lib
+ifeq ($(BUILD_VARIANT),iothub-client-hsm-type-no)
+  CMAKE_BINARY_SUBDIR:=build_openwrt-hsm-type-no
+endif
+
+ifeq ($(BUILD_VARIANT),iothub-client-hsm-type-custom)
+  CMAKE_BINARY_SUBDIR:=build_openwrt-hsm-type-custom
+  CMAKE_OPTIONS += -Dhsm_type_custom=ON -Duse_prov_client=ON
+endif
+
+# FIXME:
+# The includes are installed for all BUILD_VARIANTs.
+# If the cmake install target for the include headers differs,
+# depending on the cmake options, then this can lead to problmes
+# during compilation for other BUILD_VARIANTs.
+define Build/InstallDev
+	$(INSTALL_DIR) $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/* \
+		$(1)/usr/include/
+
+	$(INSTALL_DIR) $(1)/usr/lib/azure-$(BUILD_VARIANT)/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* \
+		$(1)/usr/lib/azure-$(BUILD_VARIANT)/
+endef
+
+define Package/iothub-client-hsm-type-no/install
+	$(INSTALL_DIR) $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libiothub_client.so.* \
 		$(1)/usr/lib/
 endef
 
-define Package/prov-device-client/install
-	$(INSTALL_DIR) $(1)/usr/lib
+define Package/iothub-client-hsm-type-custom/install
+	$(INSTALL_DIR) $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libiothub_client.so.* \
+		$(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libprov_device_client.so.* \
 		$(1)/usr/lib/
 endef
 
-$(eval $(call BuildPackage,iothub-client))
-$(eval $(call BuildPackage,prov-device-client))
+$(eval $(call BuildPackage,iothub-client-hsm-type-no))
+$(eval $(call BuildPackage,iothub-client-hsm-type-custom))
