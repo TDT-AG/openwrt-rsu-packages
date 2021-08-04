@@ -83,7 +83,7 @@ CMAKE_OPTIONS += \
 	-Duse_mqtt=ON \
 	-Duse_installed_dependencies=ON \
 	-Dskip_samples=ON \
-	-Dbuild_as_dynamic=ON \
+	-Dbuild_as_dynamic=OFF \
 	-Dbuild_service_client=OFF \
 	-Dbuild_provisioning_service_client=OFF
 
@@ -109,20 +109,6 @@ define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/lib/azure-$(BUILD_VARIANT)/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* \
 		$(1)/usr/lib/azure-$(BUILD_VARIANT)/
-endef
-
-define Package/iothub-client-hsm-type-no/install
-	$(INSTALL_DIR) $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libiothub_client.so.* \
-		$(1)/usr/lib/
-endef
-
-define Package/iothub-client-hsm-type-custom/install
-	$(INSTALL_DIR) $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libiothub_client.so.* \
-		$(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libprov_device_client.so.* \
-		$(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,iothub-client-hsm-type-no))
