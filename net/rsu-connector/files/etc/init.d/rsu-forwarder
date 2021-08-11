@@ -1,0 +1,80 @@
+#!/bin/sh /etc/rc.common
+
+START=25
+STOP=75
+
+USE_PROCD=1
+PROG="/usr/bin/rsu-forwarder"
+
+CONFIG_DIR="/tmp/rsu-forwader"
+CONFIG_FILE="${CONFIG_DIR}/rsu-forwarder-config.json"
+
+CERTS_DIR="/permdata/ecm/certs"
+DEVICE_CERT="${CERTS_DIR}/device-cert.pem"
+DEPART_CERT="${CERTS_DIR}/department_ca-cert.pem"
+STROOT_CERT="${CERTS_DIR}/st_root_ca-cert.pem"
+FULLCHAIN_CERT="${CONFIG_DIR}/device_fullchainst-cert.pem"
+DEVICE_KEY="${CERTS_DIR}/device-key.pem"
+
+process_config() {
+	local scope id signature
+
+	[ -f "${DEVICE_CERT}" ] || {
+		echo "Unable to find \"${DEVICE_CERT}\""
+		exit 1
+	}
+
+	[ -f "${DEPART_CERT}" ] || {
+		echo "Unable to find \"${DEPART_CERT}\""
+		exit 2
+	}
+
+	[ -f "${STROOT_CERT}" ] || {
+		echo "Unable to find \"${STROOT_CERT}\""
+		exit 3
+	}
+
+	[ -f "${DEVICE_KEY}" ] || {
+		echo "Unable to find \"${DEVICE_KEY}\""
+		exit 4
+	}
+
+	rm -rf "${CONFIG_DIR}"
+	mkdir -p "${CONFIG_DIR}"
+
+	cat "${DEVICE_CERT}" \
+		"${DEPART_CERT}" \
+		"${STROOT_CERT}" > "${FULLCHAIN_CERT}"
+
+	config_load rsu
+	config_get scope forwarder scope
+	config_get id forwarder id
+	config_get signature forwarder signature
+
+	json_init
+	json_add_string "DPS_IDSCOPE" "$scope"
+	json_add_string "DPS_RegistrationId" "$id"
+	json_add_string "DPS_SharedAccessSignature" "$signature"
+	json_add_string "DPS_DeviceCertificateFile" "${FULLCHAIN_CERT}"
+	json_add_string "DPS_DeviceKeyFile" "${DEVICE_KEY}"
+	json_add_int "jobschedule_tickinternal_ms" "100"
+	json_add_int "message_retry_interval_s" "10"
+
+	json_dump > "${CONFIG_FILE}"
+
+}
+
+service_triggers() {
+	procd_add_reload_trigger "rsu"
+}
+
+start_service() {
+	process_config
+
+	procd_open_instance
+	procd_set_param command "$PROG" "$CONFIG_FILE"
+	procd_set_param respawn 5 1 -1
+	procd_set_param stdout 1
+	procd_set_param stderr 1
+	procd_close_instance
+}

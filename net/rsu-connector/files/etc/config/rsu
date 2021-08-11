@@ -1,0 +1,5 @@
+
+config forwarder forwarder
+	option scope "11111"
+	option id "222222"
+	option signature "abcde"
