@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=azure-c-shared-utility
-PKG_VERSION:=2020-03-04
+PKG_VERSION:=LTS_07_2022_Ref02
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://github.com/Azure/azure-c-shared-utility
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_VERSION:=ef6ebf91a2e3530275050f0f789bab9f744c45e9
-PKG_MIRROR_HASH:=6e49bdcacb3abd04cde91bd7b560e1a92fab8632e0399f0815de478d6eb2ccd9
+PKG_SOURCE_VERSION:=$(PKG_VERSION)
+PKG_MIRROR_HASH:=6ad71f8f3d4c7ddd4b5dc0e928033bac699f0df5f3fee0a90285893c6d2bf16f
 
 PKG_MAINTAINER:=Florian Eckert <fe@dev.tdt.de>
 PKG_LICENSE:=MIT
@@ -59,23 +59,23 @@ CMAKE_OPTIONS += \
 		-Dbuild_as_dynamic:bool=ON \
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/include/azureiot/azure_c_shared_utility
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/azureiot/azure_c_shared_utility/*.h \
+	$(INSTALL_DIR) $(1)/usr/include/azureiot/azure_c_shared_utility/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/azure_c_shared_utility/*.h \
 		$(1)/usr/include/azureiot/azure_c_shared_utility/
 
-	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* \
 		$(1)/usr/lib/
 
-	$(INSTALL_DIR) $(1)/usr/cmake
-	$(CP) $(PKG_INSTALL_DIR)/usr/cmake/* \
-		$(1)/usr/cmake
+	$(INSTALL_DIR) $(1)/usr/lib/cmake/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/cmake/* \
+		$(1)/usr/lib/cmake/
 endef
 
 define Package/azure-c-shared-utility/install
-	${INSTALL_DIR} $(1)/usr/lib
+	${INSTALL_DIR} $(1)/usr/lib/
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/*.so \
-		$(1)/usr/lib
+		$(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,azure-c-shared-utility))
