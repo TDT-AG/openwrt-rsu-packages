@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=azure-iot-sdk-c
-PKG_VERSION:=LTS_01_2021_Ref01
+PKG_VERSION:=LTS_07_2022_Ref02
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://github.com/Azure/azure-iot-sdk-c
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_VERSION:=17b7d536485b5e69555d76074803495b7b18e7ab
-PKG_MIRROR_HASH:=f49744038a4fbec7c528fe8ab80df4abe775128d8b97a75ca5572a5debf09109
+PKG_SOURCE_VERSION:=$(PKG_VERSION)
+PKG_MIRROR_HASH:=23b72ba036cee5f3c495151f871745fac4174ecfd4b1c43c47566584c4e9d971
 
 PKG_MAINTAINER:=Florian Eckert <fe@dev.tdt.de>
 PKG_LICENSE:=MIT
@@ -26,6 +26,7 @@ PKG_BUILD_DEPENDS:= \
 	azure-uamqp-c \
 	azure-umqtt-c \
 	azure-uhttp-c \
+	azure-utpm-c \
 	parson \
 	macro-utils-c \
 	umock-c
@@ -99,8 +100,8 @@ endif
 # FIXME:
 # The includes are installed for all BUILD_VARIANTs.
 # If the cmake install target for the include headers differs,
-# depending on the cmake options, then this can lead to problmes
-# during compilation for other BUILD_VARIANTs.
+# depending on the cmake options, then this can lead to problems
+# during compilation for other BUILD_VARIANT´s.
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/* \

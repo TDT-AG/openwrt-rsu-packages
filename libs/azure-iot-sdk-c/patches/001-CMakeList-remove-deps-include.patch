@@ -1,0 +1,22 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -253,7 +253,6 @@ if (${original_run_e2e_tests} OR ${origi
+     set(SHARED_UTIL_REAL_TEST_FOLDER ${CMAKE_CURRENT_LIST_DIR}/c-utility/tests/real_test_files CACHE INTERNAL "this is what needs to be included when doing test sources" FORCE)
+ endif()
+ 
+-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/deps)
+ if(${use_installed_dependencies})
+     find_package(parson REQUIRED CONFIG)
+ endif()
+@@ -278,11 +277,6 @@ if(${use_installed_dependencies})
+         endif ()
+     endif ()
+ 
+-    if (${use_http})
+-        if (NOT uhttp_FOUND)
+-            find_package(uhttp REQUIRED CONFIG)
+-        endif ()
+-    endif ()
+ else ()
+     add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/c-utility)
+ 
