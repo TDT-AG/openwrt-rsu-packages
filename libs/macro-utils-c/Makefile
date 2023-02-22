@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=macro-utils-c
-PKG_VERSION:=2019-09-23
+PKG_VERSION:=2019-10-17
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://github.com/Azure/macro-utils-c
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_VERSION:=5926caf4e42e98e730e6d03395788205649a3ada
-PKG_MIRROR_HASH:=ed10f1047476f0a7f89bf10eb833a39bfefea5d232539e0d1db72b717ff39865
+PKG_MIRROR_HASH:=0265a54edc859709e1d228f70fcb58c3054a55f91de08b69879e9d7838bca33a
 
 PKG_MAINTAINER:=Florian Eckert <fe@dev.tdt.de>
 PKG_LICENSE:=MIT
@@ -37,14 +37,19 @@ define Package/macro-utils-c/description
 A C header file that contains a multitude of very useful C macros.
 endef
 
+define Build/Prepare
+	$(call Build/Prepare/Default)
+	$(RM) -rf $(PKG_BUILD_DIR)/deps
+endef
+
 CMAKE_BINARY_SUBDIR:=build_openwrt
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/include/azure_macro_utils
+	$(INSTALL_DIR) $(1)/usr/include/azure_macro_utils/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/azure_macro_utils/*.h \
 		$(1)/usr/include/azure_macro_utils/
 
-	$(INSTALL_DIR) $(1)/usr/cmake
+	$(INSTALL_DIR) $(1)/usr/cmake/
 	$(CP) $(PKG_INSTALL_DIR)/usr/cmake/*.cmake \
 		$(1)/usr/cmake/
 endef
