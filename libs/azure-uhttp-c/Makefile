@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=azure-uhttp-c
-PKG_VERSION:=2021-01-20
+PKG_VERSION:=2022-08-09
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://github.com/Azure/azure-uhttp-c
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_VERSION:=d286589762e59f0ad2f92f7c5a58f7979b5ab082
-PKG_MIRROR_HASH:=9734277922dd9961fc7bd69e4844ddc7669eec675efab78f9f5aa8af19247006
+PKG_SOURCE_VERSION:=2b86b92628e55c9597aef8b96b0a73048ef072b3
+PKG_MIRROR_HASH:=259b9afc492e03269b09e510ff683cb4da6e4860cfdd9b4a83d16167b55eb49b
 
 PKG_MAINTAINER:=Florian Eckert <fe@dev.tdt.de>
 PKG_LICENSE:=MIT
@@ -57,16 +57,16 @@ CMAKE_OPTIONS += \
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/azureiot/azure_uhttp_c
-	$(CP) $(PKG_INSTALL_DIR)/azureiot/azure_uhttp_c/*.h \
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/azureiot/azure_uhttp_c/*.h \
 		$(1)/usr/include/azureiot/azure_uhttp_c/
 
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.a \
 		$(1)/usr/lib/
 
-	$(INSTALL_DIR) $(1)/usr/cmake
-	$(CP) $(PKG_INSTALL_DIR)/usr/cmake/* \
-		$(1)/usr/cmake
+	$(INSTALL_DIR) $(1)/usr/lib/cmake
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/cmake/* \
+		$(1)/usr/lib/cmake
 endef
 
 $(eval $(call BuildPackage,azure-uhttp-c))
