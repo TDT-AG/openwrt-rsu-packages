@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=parson
-PKG_VERSION:=2019-07-11
+PKG_VERSION:=1.3.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://github.com/kgabis/parson
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_VERSION:=c5bb9557fe98367aa8e041c65863909f12ee76b2
-PKG_MIRROR_HASH:=83f01cafc64d4c1c197ca65c6cabc5f0fe98e6f4728c22e337ce1ce1c9df1a18
+PKG_SOURCE_VERSION:=4158fdbea7da5a7c7efb182b69707c78f35a398f
+PKG_MIRROR_HASH:=39ec121cf9b1c77ff61b08e1f0f24fdcd48878c123a507c3e65a8abcdb6e7f4e
 
 PKG_MAINTAINER:=Florian Eckert <fe@dev.tdt.de>
 PKG_LICENSE:=MIT
@@ -47,17 +47,17 @@ CMAKE_BINARY_SUBDIR:=build
 TARGET_CFLAGS += $(FPIC)
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/include
+	$(INSTALL_DIR) $(1)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/*.h \
 			$(1)/usr/include/
 
-	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.a \
 			$(1)/usr/lib/
 
-	$(INSTALL_DIR) $(1)/usr/cmake
-	$(CP) $(PKG_INSTALL_DIR)/usr/cmake/* \
-		$(1)/usr/cmake
+	$(INSTALL_DIR) $(1)/usr/lib/cmake/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/cmake/* \
+		$(1)/usr/lib/cmake/
 endef
 
 $(eval $(call BuildPackage,parson))
