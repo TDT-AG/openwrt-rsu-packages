@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=azure-umqtt-c
-PKG_VERSION:=2021-01-20
+PKG_VERSION:=LTS_07_2022_Ref02
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://github.com/Azure/azure-umqtt-c
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_VERSION:=0c369ee8b046906d2666c9c850be1b313012e4a7
-PKG_MIRROR_HASH:=c6d9cfe8bb3c7db7dc7e867bb2a0ac5d27303785dc335eeb6e5c834ced3ebb8e
+PKG_SOURCE_VERSION:=$(PKG_VERSION)
+PKG_MIRROR_HASH:=1c0f88ca11ba3a1f20164ee66a5d623c35b9d33b15886b9000fcab153b011455
 
 PKG_MAINTAINER:=Florian Eckert <fe@dev.tdt.de>
 PKG_LICENSE:=MIT
@@ -59,17 +59,17 @@ CMAKE_OPTIONS += \
 		-Drun_unittests:bool=OFF
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/include/azureiot/azure_umqtt_c
+	$(INSTALL_DIR) $(1)/usr/include/azureiot/azure_umqtt_c/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/azureiot/azure_umqtt_c/*.h \
 		$(1)/usr/include/azureiot/azure_umqtt_c/
 
-	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.a \
 		$(1)/usr/lib/
 
-	$(INSTALL_DIR) $(1)/usr/cmake
-	$(CP) $(PKG_INSTALL_DIR)/usr/cmake/* \
-		$(1)/usr/cmake
+	$(INSTALL_DIR) $(1)/usr/lib/cmake/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/cmake/* \
+		$(1)/usr/lib/cmake/
 endef
 
 $(eval $(call BuildPackage,azure-umqtt-c))
